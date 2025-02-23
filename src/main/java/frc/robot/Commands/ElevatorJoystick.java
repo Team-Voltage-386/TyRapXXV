@@ -16,8 +16,9 @@ public class ElevatorJoystick extends Command {
     ElevatorSubsystem el;
 
     private final XboxController m_controller = new XboxController(Controller.kManipControllerID);
+  
     protected final DoubleEntry multiplier;
-
+  
     public ElevatorJoystick(ElevatorSubsystem el, NetworkTableInstance nt) {
         this.el = el;
         table = nt.getTable(getName());
