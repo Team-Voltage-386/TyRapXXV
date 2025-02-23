@@ -295,7 +295,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         System.out.println("Setting Elevator voltage " + voltage);
         double currentPosition = m_motorLeader.getEncoder().getPosition();
         outputVoltage = voltage;
-        if (bottomLimitSwitch.get()){
+        if (!bottomLimitSwitch.get()){
             m_motorLeader.getEncoder().setPosition(0);
             if (outputVoltage < 0){
                 outputVoltage = 0;
@@ -340,7 +340,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             this.m_lastSpeed = actualVelocity;
             this.m_lastTime = Timer.getFPGATimestamp();
 
-            if (bottomLimitSwitch.get()){
+            if (!bottomLimitSwitch.get()){
                 m_motorLeader.getEncoder().setPosition(0);
                 if (outputVoltage < 0){
                     outputVoltage = 0;
@@ -366,7 +366,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             desiredVelocityPub.set(targetVelocity);
         }
         m_encoder.set(m_motorLeader.getEncoder().getPosition());
-        m_bottomlimitSwitch.set(bottomLimitSwitch.get());
+        m_bottomlimitSwitch.set(!bottomLimitSwitch.get());
         m_toplimitSwitch.set(topLimitSwitch.get()); 
     }
 }
