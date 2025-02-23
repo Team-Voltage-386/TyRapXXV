@@ -321,6 +321,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_motorPublisherFollower.update();
 
         if (!this.m_testMode) {
+            System.out.println("Not in test mode!!!");
             double currentPosition = m_motorLeader.getEncoder().getPosition();
             double targetVelocity = m_controller.getSetpoint().velocity;
             double targetAcceleration = (targetVelocity - this.m_lastSpeed)
@@ -335,7 +336,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             this.m_lastSpeed = actualVelocity;
             this.m_lastTime = Timer.getFPGATimestamp();
 
-            if (!bottomLimitSwitch.get()) {
+            if (!bottomLimitSwitch.get()) { //Bottom Limit reached
                 m_motorLeader.getEncoder().setPosition(0);
                 if (outputVoltage < 0) {
                     outputVoltage = 0;
