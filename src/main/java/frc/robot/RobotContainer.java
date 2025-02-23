@@ -139,7 +139,7 @@ public class RobotContainer {
                 .onTrue(this.m_swerve.setFieldRelativeCommand(false))
                 .onFalse(this.m_swerve.setFieldRelativeCommand(true));
 
-        Controller.kManipulatorController.rightTrigger().whileTrue(new ElevatorJoystick(m_elevator));
+        Controller.kManipulatorController.rightTrigger().whileTrue(new ElevatorJoystick(m_elevator, NetworkTableInstance.getDefault()));
 
         Controller.kDriveController.leftBumper().onTrue(m_swerve.setDriveMultCommand(0.5))
                 .onFalse(m_swerve.setDriveMultCommand(1));

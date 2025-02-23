@@ -23,19 +23,15 @@ public class ElevatorJoystick extends Command {
         this.el = el;
         table = nt.getTable(getName());
 
-        multiplier = table.getDoubleTopic("multiplier").getEntry(3.5);
-        multiplier.set(3.5);
+        multiplier = table.getDoubleTopic("multiplier").getEntry(-6);
+        multiplier.set(-6);
 
         System.out.println("ElevatorJoystick command initialized");
     }
 
     @Override
-    public void initialize() {
-        this.el.setTestMode(true);
-    }
-
-    @Override
     public void execute() {
+        this.el.setTestMode(true);
         double elSpeed = m_controller.getLeftY() * multiplier.get();
         el.setVoltageTest(elSpeed);
     }
