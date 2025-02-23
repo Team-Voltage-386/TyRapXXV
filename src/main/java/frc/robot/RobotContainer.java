@@ -153,22 +153,23 @@ public class RobotContainer {
         // Controller.kDriveController.leftBumper().onTrue(new DriveRange(m_swerve, ()
         // -> 0.5, () -> m_range.getRange(), 90, 0.2));
 
-        Controller.kDriveController.povUp().whileTrue(m_elevator.runOnce(() -> m_elevator.setVoltageTest(0.5)));
-        Controller.kDriveController.povUp().onFalse(m_elevator.runOnce(() -> m_elevator.setVoltageTest(0.0)));
-        Controller.kDriveController.povDown().whileTrue(m_elevator.runOnce(() -> m_elevator.setVoltageTest(-0.5)));
-        Controller.kDriveController.povDown().onFalse(m_elevator.runOnce(() -> m_elevator.setVoltageTest(0.0)));
+        // Controller.kDriveController.povUp().whileTrue(m_elevator.runOnce(() -> m_elevator.setVoltageTest(0.5)));
+        // Controller.kDriveController.povUp().onFalse(m_elevator.runOnce(() -> m_elevator.setVoltageTest(0.0)));
+        // Controller.kDriveController.povDown().whileTrue(m_elevator.runOnce(() -> m_elevator.setVoltageTest(-0.5)));
+        // Controller.kDriveController.povDown().onFalse(m_elevator.runOnce(() -> m_elevator.setVoltageTest(0.0)));
 
         //Controller.kDriveController.leftBumper().whileTrue(m_coral.runOnce(() -> m_coral.setVoltageTest(0.3)));
         //Controller.kDriveController.leftBumper().onFalse(m_coral.runOnce(() -> m_coral.setVoltageTest(0.0)));
         //Controller.kDriveController.rightBumper().whileTrue(m_coral.runOnce(() -> m_coral.setVoltageTest(-0.3)));
         //Controller.kDriveController.rightBumper().onFalse(m_coral.runOnce(() -> m_coral.setVoltageTest(0.0)));
 
-        Controller.kManipulatorController.povLeft().whileTrue(new MoveStinger(m_climber, true));
-        Controller.kManipulatorController.povRight().whileTrue(new MoveStinger(m_climber, false));
-        Controller.kManipulatorController.leftBumper()
-                .onTrue(m_climber.runOnce(() -> m_climber.toggleGrabArms()));
-        Controller.kManipulatorController.back()
-                .onTrue(m_climber.runOnce(() -> m_climber.toggleClimbMode()));
+        //COMMENTED OUT @ 5:21
+        // Controller.kManipulatorController.povLeft().whileTrue(new MoveStinger(m_climber, true));
+        // Controller.kManipulatorController.povRight().whileTrue(new MoveStinger(m_climber, false));
+        // Controller.kManipulatorController.leftBumper()
+        //         .onTrue(m_climber.runOnce(() -> m_climber.toggleGrabArms()));
+        // Controller.kManipulatorController.back()
+        //         .onTrue(m_climber.runOnce(() -> m_climber.toggleClimbMode()));
     }
 
     public Drivetrain getDrivetrain() {
