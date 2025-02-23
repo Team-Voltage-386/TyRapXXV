@@ -27,6 +27,7 @@ import frc.robot.Subsystems.AlgaeGrabberSubsystem;
 import frc.robot.Subsystems.Climber;
 import frc.robot.Subsystems.Drivetrain;
 import frc.robot.Subsystems.ElevatorSubsystem;
+import frc.robot.Subsystems.LEDSubsystem;
 import frc.robot.Subsystems.Limelight;
 import frc.robot.Subsystems.RangeSensor;
 import frc.robot.Subsystems.CoralSubsystem;
@@ -57,6 +58,7 @@ public class RobotContainer {
     private final AlgaeGrabberSubsystem m_algae;
     private final Climber m_climber;
     private final SendableChooser<String> autoChooser;
+    private final LEDSubsystem m_ledSubsystem;
     protected final ElevatorSubsystem m_elevator;
     protected final CoralSubsystem m_coral;
 
@@ -89,6 +91,7 @@ public class RobotContainer {
 
         this.m_Limelight = new Limelight();
         this.m_Limelight.setLimelightPipeline(2);
+        this.m_ledSubsystem = new LEDSubsystem(0, 1, m_Limelight); // Ensure correct PWM ports
         this.m_algae = new AlgaeGrabberSubsystem(NetworkTableInstance.getDefault());
         this.m_climber = new Climber();
 
@@ -110,7 +113,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("StopDrive", new StopDrive(m_swerve));
 
         configureBindings();
+
     }
+    
 
     /**
      * Use this method to define your trigger->command mappings. Triggers can be
