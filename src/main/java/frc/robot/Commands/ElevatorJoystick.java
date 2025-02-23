@@ -8,7 +8,7 @@ import frc.robot.Subsystems.ElevatorSubsystem;
 public class ElevatorJoystick extends Command {
     ElevatorSubsystem el;
     private final XboxController m_controller = new XboxController(Controller.kManipControllerID);
-    protected final double multiplier = -3.5;
+    protected final double multiplier = -6.0;
 
     public ElevatorJoystick(ElevatorSubsystem el) {
         this.el = el;
