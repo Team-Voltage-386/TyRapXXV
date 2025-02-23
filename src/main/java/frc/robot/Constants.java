@@ -105,8 +105,7 @@ public class Constants {
         public static final double kMaxNecessarySpeed = DriveTrainConstants.kMaxPossibleSpeed * 0.8;
 
         public static final CommandXboxController kDriveController = new CommandXboxController(kDriveControllerID);
-        public static final CommandXboxController kManipulatorController = new CommandXboxController(
-                kManipControllerID);
+        public static final CommandXboxController kManipulatorController = new CommandXboxController(kManipControllerID);
     }
 
     public static class Offsets {
