@@ -164,12 +164,12 @@ public class RobotContainer {
         //Controller.kDriveController.rightBumper().onFalse(m_coral.runOnce(() -> m_coral.setVoltageTest(0.0)));
 
         //COMMENTED OUT @ 5:21
-        // Controller.kManipulatorController.povLeft().whileTrue(new MoveStinger(m_climber, true));
-        // Controller.kManipulatorController.povRight().whileTrue(new MoveStinger(m_climber, false));
-        // Controller.kManipulatorController.leftBumper()
-        //         .onTrue(m_climber.runOnce(() -> m_climber.toggleGrabArms()));
-        // Controller.kManipulatorController.back()
-        //         .onTrue(m_climber.runOnce(() -> m_climber.toggleClimbMode()));
+        Controller.kManipulatorController.povLeft().whileTrue(new MoveStinger(m_climber, true));
+        Controller.kManipulatorController.povRight().whileTrue(new MoveStinger(m_climber, false));
+        Controller.kManipulatorController.leftBumper()
+                .onTrue(m_climber.runOnce(() -> m_climber.toggleGrabArms()));
+        Controller.kManipulatorController.back()
+                .onTrue(m_climber.runOnce(() -> m_climber.toggleClimbMode()));
     }
 
     public Drivetrain getDrivetrain() {

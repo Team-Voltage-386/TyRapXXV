@@ -209,13 +209,13 @@ public class ElevatorSubsystem extends SubsystemBase {
         topLimitSwitch = new DigitalInput(Constants.Elevator.kTopLimitSwitch);
 
         SparkBaseConfig motorConf = new SparkFlexConfig();
-        motorConf.smartCurrentLimit(40);
+        motorConf.smartCurrentLimit(55);
         motorConf.idleMode(IdleMode.kBrake);
         motorConf.inverted(false);
         m_motorLeader.configure(motorConf, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         SparkBaseConfig followerConf = new SparkFlexConfig();
-        followerConf.smartCurrentLimit(40);
+        followerConf.smartCurrentLimit(55);
         followerConf.idleMode(IdleMode.kBrake);
         followerConf.inverted(false);
         followerConf.follow(m_motorLeader, false);

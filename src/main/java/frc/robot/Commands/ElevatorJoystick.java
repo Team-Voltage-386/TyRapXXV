@@ -23,8 +23,8 @@ public class ElevatorJoystick extends Command {
         this.el = el;
         table = nt.getTable(getName());
 
-        multiplier = table.getDoubleTopic("multiplier").getEntry(-6);
-        multiplier.set(-6);
+        multiplier = table.getDoubleTopic("multiplier").getEntry(-3);
+        multiplier.set(-3);
 
         System.out.println("ElevatorJoystick command initialized");
     }
