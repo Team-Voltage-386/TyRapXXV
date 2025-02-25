@@ -321,7 +321,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_motorPublisherFollower.update();
 
         if (!this.m_testMode) {
-            System.out.println("Not in test mode!!!");
             double currentPosition = m_motorLeader.getEncoder().getPosition();
             double targetVelocity = m_controller.getSetpoint().velocity;
             double targetAcceleration = (targetVelocity - this.m_lastSpeed)
