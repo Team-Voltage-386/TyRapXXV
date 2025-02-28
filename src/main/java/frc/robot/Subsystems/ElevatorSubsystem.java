@@ -26,10 +26,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Utils.MotorPublisher;
 import frc.robot.Utils.TrapezoidController;
+import frc.robot.Utils.SafeableSubsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 
-public class ElevatorSubsystem extends SubsystemBase {
+public class ElevatorSubsystem extends SafeableSubsystem {
     public enum ElevatorLevel {
         /**
          * The ground level of the elevator, where the human player can load coral.
@@ -245,9 +246,10 @@ public class ElevatorSubsystem extends SubsystemBase {
                 Constants.Elevator.PID.kP,
                 Constants.Elevator.PID.kI,
                 Constants.Elevator.PID.kD);
-                
+
         m_trapController = new TrapezoidController(0.0, 0.1, .05, Constants.Elevator.kMaxVelocity,
-            Constants.Elevator.kMaxAcceleration, Constants.Elevator.kMaxAcceleration, Constants.Elevator.kDecelProp);
+                Constants.Elevator.kMaxAcceleration, Constants.Elevator.kMaxAcceleration,
+                Constants.Elevator.kDecelProp);
 
         setLevel(ElevatorLevel.GROUND);
     }
@@ -321,6 +323,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void setTestMode(boolean testMode) {
         this.m_testMode = testMode;
+    }
+
+    public void makeSafe() {
+        setLevel(ElevatorLevel.GROUND);
     }
 
     @Override

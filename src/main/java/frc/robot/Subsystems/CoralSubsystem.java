@@ -11,14 +11,16 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Utils.MotorPublisher;
+import frc.robot.Utils.SafeableSubsystem;
 import edu.wpi.first.networktables.DoubleEntry;
+
 /*
  * 
  * different speeds up vs down 
  * IR sensor 
  * holde break logic
  */
-public class CoralSubsystem extends SubsystemBase {
+public class CoralSubsystem extends SafeableSubsystem {
     private final NetworkTable m_table;
 
     private final SparkMax m_wristMotor;
@@ -54,8 +56,10 @@ public class CoralSubsystem extends SubsystemBase {
         kWristMotorVoltageForward = m_table.getDoubleTopic("wrist motor voltage forward").getEntry(0.0);
         kWristMotorVoltageReverse = m_table.getDoubleTopic("wrist motor voltage reverse").getEntry(0.0);
 
-        // kWristMotorSpeedForward = m_table.getDoubleTopic("wrist motor speed forward").getEntry(0.0);
-        // kWristMotorSpeedReverse = m_table.getDoubleTopic("wrist motor speed reverse").getEntry(0.0);
+        // kWristMotorSpeedForward = m_table.getDoubleTopic("wrist motor speed
+        // forward").getEntry(0.0);
+        // kWristMotorSpeedReverse = m_table.getDoubleTopic("wrist motor speed
+        // reverse").getEntry(0.0);
 
         kWristMotorVoltageForward.set(0.0);
         kWristMotorVoltageReverse.set(0.0);
@@ -64,7 +68,7 @@ public class CoralSubsystem extends SubsystemBase {
 
         m_coralGrabberMotorPublisher = new MotorPublisher(m_coralGrabberMotor, m_table, "Grabber Motor");
         m_wristMotorPublisher = new MotorPublisher(m_wristMotor, m_table, "Wrist Motor");
-        
+
         m_wristEncoder = m_coralGrabberMotor.getAbsoluteEncoder();
         m_wristEncoderPub = nt.getDoubleTopic("Wrist Encoder").publish();
 
@@ -77,52 +81,55 @@ public class CoralSubsystem extends SubsystemBase {
     }
 
     // public void setVoltageTest(double voltage) {
-    //     System.out.println("Setting Coral voltage " + voltage);
-    //     m_wristMotor.setVoltage(voltage);
+    // System.out.println("Setting Coral voltage " + voltage);
+    // m_wristMotor.setVoltage(voltage);
     // }
 
-    public void reverseMotor(){
+    public void reverseMotor() {
         double voltage = kWristMotorVoltageReverse.get();
-        //double speed = kWristMotorSpeedReverse.get();
-      //  m_wristMotor.set(-speed);
-        if (m_wristEncoder.getPosition() <= Constants.Coral.kMinEncoderPos){
+        // double speed = kWristMotorSpeedReverse.get();
+        // m_wristMotor.set(-speed);
+        if (m_wristEncoder.getPosition() <= Constants.Coral.kMinEncoderPos) {
             stopMotorWrist();
-        }
-        else {
+        } else {
             m_wristMotor.setVoltage(voltage);
         }
 
     }
-    
-    public void forwardMotor(){
+
+    public void forwardMotor() {
         double voltage = kWristMotorVoltageForward.get();
-     //   double speed = kWristMotorSpeedForward.get();
-        if (m_wristEncoder.getPosition() >= Constants.Coral.kMaxEncoderPos){
+        // double speed = kWristMotorSpeedForward.get();
+        if (m_wristEncoder.getPosition() >= Constants.Coral.kMaxEncoderPos) {
             stopMotorWrist();
-        }
-        else {
+        } else {
             m_wristMotor.setVoltage(-voltage);
         }
 
-        //   m_wristMotor.set(speed);
-        }
-    
-    public void stopMotorWrist(){
-        holdPosition = m_wristEncoder.getPosition();
-        m_wristMotor.setVoltage(0.0);
-       // m_wristMotor.set(0.0);
+        // m_wristMotor.set(speed);
     }
 
-    public void stopMotorGrabber(){
+    public void stopMotorWrist() {
+        holdPosition = m_wristEncoder.getPosition();
+        m_wristMotor.setVoltage(0.0);
+        // m_wristMotor.set(0.0);
+    }
+
+    public void stopMotorGrabber() {
         m_coralGrabberMotor.set(0.0);
     }
-    
+
     public void extendManipulator() {
         forwardMotor();
     }
-    
+
     public void retractManipulator() {
         reverseMotor();
+    }
+
+    public void makeSafe() {
+        retractManipulator();
+        stopMotorGrabber();
     }
 
     @Override
