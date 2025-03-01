@@ -134,8 +134,8 @@ public class Constants {
         public static final double kBackRightOffset = 1.101;
 
         // Camera Positioning
-        public static final double cameraOffsetForwardM = 0.10;
-        public static final double cameraOffsetFromFrontBumber = 0.38;
+        public static final double cameraOffsetForwardM = 0.08;
+        public static final double cameraOffsetFromFrontBumber = 0.44;
     }
 
     public static class LimelightConstants {

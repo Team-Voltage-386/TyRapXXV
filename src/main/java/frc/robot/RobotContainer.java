@@ -38,6 +38,8 @@ import frc.robot.Commands.MoveCoralManipulator;
 import frc.robot.Commands.MoveStinger;
 import frc.robot.Commands.ResetOdoCommand;
 import frc.robot.Commands.StopDrive;
+import frc.robot.Commands.groups.ScoreCoralLeft;
+import frc.robot.Commands.groups.ScoreCoralRight;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -130,16 +132,21 @@ public class RobotContainer {
      */
     private void configureBindings() {
         Controller.kDriveController.y().onTrue((new ResetOdoCommand(m_swerve)));
-        Controller.kDriveController.rightBumper()
-                .onTrue(this.m_swerve.setFieldRelativeCommand(false))
-                .onFalse(this.m_swerve.setFieldRelativeCommand(true));
+        // Controller.kDriveController.rightBumper()
+        //         .onTrue(this.m_swerve.setFieldRelativeCommand(false))
+        //         .onFalse(this.m_swerve.setFieldRelativeCommand(true));
 
         //Controller.kManipulatorController.rightTrigger().whileTrue(new ElevatorJoystick(m_elevator));
 
-        Controller.kDriveController.leftBumper().onTrue(m_swerve.setDriveMultCommand(0.5))
-                .onFalse(m_swerve.setDriveMultCommand(1));
-        Controller.kDriveController.a().onTrue(new DriveOffset(m_swerve, m_Limelight, false));
-        Controller.kDriveController.b().onTrue(new DriveOffset(m_swerve, m_Limelight, true));
+        // Controller.kDriveController.leftBumper().onTrue(m_swerve.setDriveMultCommand(0.5))
+        //         .onFalse(m_swerve.setDriveMultCommand(1));
+
+        Controller.kDriveController.leftBumper().onTrue(new ScoreCoralLeft(m_swerve, m_Limelight));
+        Controller.kDriveController.rightBumper().onTrue(new ScoreCoralRight(m_swerve, m_Limelight));
+
+
+        // Controller.kDriveController.a().onTrue(new DriveOffset(m_swerve, m_Limelight, false));
+        // Controller.kDriveController.b().onTrue(new DriveOffset(m_swerve, m_Limelight, true));
         /*Controller.kDriveController.x().onTrue(new DriveDistance(m_swerve,
                 () -> m_Limelight.getzDistanceMeters() - 0.1, 0));*/
 
@@ -164,6 +171,8 @@ public class RobotContainer {
         Controller.kDriveController.povLeft().onTrue(m_elevator.runOnce(() -> m_elevator.levelDown()));
         Controller.kDriveController.povRight().onTrue(m_elevator.runOnce(() -> m_elevator.levelUp()));
         Controller.kDriveController.x().whileTrue(new EjectCoral(m_coral));
+
+
         
         Controller.kManipulatorController.leftBumper()
                 .onTrue(m_climber.runOnce(() -> m_climber.toggleGrabArms()));
