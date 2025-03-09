@@ -23,6 +23,7 @@ import frc.robot.Constants;
 import frc.robot.Utils.MotorPublisher;
 import frc.robot.Utils.TrapezoidController;
 import frc.robot.Utils.SafeableSubsystem;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Timer;
@@ -273,14 +274,16 @@ public class ElevatorSubsystem extends SafeableSubsystem {
     public void setLevelFlag(ElevatorLevel level) {
         m_levelFlag = level;
         isAnyLevelSet = true;
-        System.out.println("Setting elevator level flag to: " + m_levelFlag);
+        //System.out.println("Setting elevator level flag to: " + m_levelFlag);
+        DataLogManager.log("Setting elevator level flag to: " + m_levelFlag);
     }
 
     public void setLevelUsingFlag() {
         // m_level = m_levelFlag;
         // m_table_level.set(m_level.toString());
         this.setLevel(m_levelFlag);
-        System.out.println("Moving elevator using the flag to: " + m_level);
+        //System.out.println("Moving elevator using the flag to: " + m_level);
+        DataLogManager.log("Moving elevator using the flag to: " + m_level);
     }
 
     public ElevatorLevel getLevelFlag() {

@@ -9,6 +9,8 @@ import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class Robot extends TimedRobot {
     private RobotContainer m_container;
@@ -18,6 +20,10 @@ public class Robot extends TimedRobot {
         m_container = new RobotContainer();
         FollowPathCommand.warmupCommand().schedule();
         m_container.getDrivetrain().resetGyro();
+        // Starts recording to data log
+        DataLogManager.start();
+        // Record both DS control and joystick data
+        DriverStation.startDataLog(DataLogManager.getLog());
     }
 
     @Override
