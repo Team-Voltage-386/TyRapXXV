@@ -27,6 +27,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
@@ -177,12 +178,8 @@ public class Drivetrain extends SubsystemBase {
                         // Boolean supplier that controls when the path will be mirrored for the red
                         // alliance
                         // This will flip the path being followed to the red side of the field.
-                        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-                        var alliance = DriverStation.getAlliance();
-                        if (alliance.isPresent()) {
-                            return alliance.get() == DriverStation.Alliance.Red;
-                        }
-                        return false;
+                        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE            
+                        return getAlliance() == DriverStation.Alliance.Red;
                     },
                     this // Reference to this subsystem to set requirements
             );
@@ -204,22 +201,28 @@ public class Drivetrain extends SubsystemBase {
         return m_gyro;
     }
 
+    public Alliance getAlliance() {
+        return DriverStation.getAlliance().get();
+    }
+
     /**
      * Resets Orientation of the robot
      */
     public void resetGyro() {
-        var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent()) {
-            if (alliance.get() == DriverStation.Alliance.Blue) {
-                System.out.println("Initializing gyro to 180 for BLUE");
-                m_gyro.setYaw(180.0);
-            } else {
-                System.out.println("Initializing gyro to 0 for RED");
-                m_gyro.setYaw(0);
-            }
+        if (getAlliance() == Alliance.Blue) {
+            System.out.println("Initializing gyro to 180 for BLUE");
+            m_gyro.setYaw(180.0);
         } else {
-            System.out.println("Initializing gyro to 0 for default");
+            System.out.println("Initializing gyro to 0 for RED");
             m_gyro.setYaw(0);
+        }
+    }
+
+    public double getExpectedStartGyro() {
+        if (getAlliance() == DriverStation.Alliance.Blue) {
+            return 180.0;
+        } else {
+            return 0.0;
         }
     }
 
@@ -251,11 +254,11 @@ public class Drivetrain extends SubsystemBase {
         if (DriverStation.getRawAllianceStation().equals(AllianceStationID.Blue1)
                 || DriverStation.getRawAllianceStation().equals(AllianceStationID.Blue2)
                 || DriverStation.getRawAllianceStation().equals(AllianceStationID.Blue3)) {
-            m_odometry.resetPosition(getGyroYawRotation2d(), getModulePositions(),
+            m_odometry.resetPosition(new Rotation2d(Math.PI), getModulePositions(),
                     new Pose2d(new Translation2d(getRoboPose2d().getX(), getRoboPose2d().getY()),
-                            new Rotation2d()));  
+                            new Rotation2d(Math.PI)));
         } else {
-            m_odometry.resetPosition(getGyroYawRotation2d(), getModulePositions(),
+            m_odometry.resetPosition(new Rotation2d(), getModulePositions(),
                     new Pose2d(new Translation2d(getRoboPose2d().getX(), getRoboPose2d().getY()),
                             new Rotation2d()));
         }
@@ -318,14 +321,8 @@ public class Drivetrain extends SubsystemBase {
 
     public Rotation2d getPlayerStationRelativeYaw2d() {
         Rotation2d rot = Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble());
-        var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent()) {
-            if (alliance.get() == DriverStation.Alliance.Red) {
-                rot = rot.rotateBy(Rotation2d.k180deg);
-            } else {
-            }
-        } else {
-            System.err.println("Alliance not set");
+        if (getAlliance() == DriverStation.Alliance.Red) {
+            rot = rot.rotateBy(Rotation2d.k180deg);
         }
         return rot;
     }

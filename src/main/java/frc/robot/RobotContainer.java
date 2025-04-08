@@ -186,7 +186,6 @@ public class RobotContainer {
 
                 m_competitionTab.add("Drivetrain", this.m_swerve);
 
-                // configureBindings();
                 NamedCommands.registerCommand("StopDrive", new StopDrive(m_swerve));
 
                 
@@ -419,14 +418,9 @@ public class RobotContainer {
 
         protected SequentialCommandGroup buildScoreOffsetCommand(boolean isLeft) {
                 return new SequentialCommandGroup(
-                                new PrintCommand("Running offset score routine"),
                                 new ParallelCommandGroup(
                                                 new SequentialCommandGroup(
                                                                 new DriveOffset(m_swerve, m_Limelight, isLeft),
-                                                                // new StopDrive(m_swerve),
-                                                                // new StationaryWait(m_swerve, 0.06),
-                                                                // new DriveDistance(m_swerve, () -> 0.3,
-                                                                // 0).withTimeout(0.6),
                                                                 new DriveDistance2(m_swerve,
                                                                                 () -> (m_Limelight.getzDistanceMeters()
                                                                                                 - .42),
@@ -446,7 +440,6 @@ public class RobotContainer {
 
         protected SequentialCommandGroup buildScoreBumperedUpCommand(boolean isLeft, double forwardTimeout) {
                 return new SequentialCommandGroup(
-                                new PrintCommand("Running drive left right score"),
                                 new ParallelCommandGroup(
                                                 // Raise the elevator to the selected level while in parallel aligning
                                                 // left or
@@ -455,13 +448,10 @@ public class RobotContainer {
                                                 new SequentialCommandGroup(
                                                                 new DriveDistance2(m_swerve, () -> 0.15, 0)
                                                                                 .withTimeout(forwardTimeout),
-                                                                // new DriveFixedVelocity(m_swerve, 0, () ->
-                                                                // 0.5).withTimeout(0.2),
                                                                 new DriveFixedVelocity(m_swerve, 180, () -> 0.25)
                                                                                 .withTimeout(.1),
                                                                 new DriveLeftOrRight(m_swerve, m_Limelight, isLeft),
                                                                 new StopDrive(m_swerve))),
-                                new StopDrive(m_swerve),
                                 new EjectCoral(m_coral),
                                 new StationaryWait(m_swerve, .5),
                                 new ConditionalCommand(
@@ -553,16 +543,15 @@ public class RobotContainer {
         }
 
         public SequentialCommandGroup buildTwoPieceAuto(String pathToReef, int tag1,
-                        String pathToCoralStn, String pathCoralToReef, int tag2, double forwardDistM) {
+                        String pathToCoralStn, String pathCoralToReef, int tag2, double forwardDistM, boolean scoreLeft) {
                 return new SequentialCommandGroup(
                                 m_swerve.runOnce(() -> m_swerve.setEnableVisionPoseInputs(false)),
                                 new StopDrive(m_swerve),
                                 getAutonomousCommand(pathToReef, true),
                                 m_elevator.runOnce(() -> m_elevator.setLevelFlag(ElevatorLevel.LEVEL4)),
-                                buildScoreOffsetAutoCommand(true),
+                                buildScoreOffsetAutoCommand(scoreLeft),
                                 new StationaryWait(m_swerve, .1),
                                 getAutonomousCommand(pathToCoralStn, false),
-                                new StopDrive(m_swerve),
                                 //new StationaryWait(m_swerve, .05),
                                 new DriveDistance2(m_swerve, () -> .55, 180).withTimeout(0.7),
                                 new StopDrive(m_swerve),
@@ -570,7 +559,7 @@ public class RobotContainer {
                                 getAutonomousCommand(pathCoralToReef, false),
                                 new StopDrive(m_swerve),
                                 //new StationaryWait(m_swerve, .05),
-                                buildScoreOffsetCommand(false),
+                                buildScoreOffsetCommand(scoreLeft),
                                 m_swerve.runOnce(() -> m_swerve.setEnableVisionPoseInputs(false)));
         }
 
@@ -609,7 +598,7 @@ public class RobotContainer {
                         }
                         start = buildTwoPieceAuto("Starting2Reef2",
                                         tag1, "Reef2Player1",
-                                        "Player1Reef1", tag2, 0.16);
+                                        "Player1Reef1", tag2, 0.16, false);
                         start.schedule();
                 } else if (auto.equals("Right2Piece")) {
                         int tag1 = 22;
@@ -622,7 +611,7 @@ public class RobotContainer {
                         }
                         start = buildTwoPieceAuto("Starting6Reef4",
                                         tag1, "Reef4Player2",
-                                        "Player2Reef5", tag2, 0.16);
+                                        "Player2Reef5", tag2, 0.16, true);
                         start.schedule();
                 } else if (auto.equals("OnePieceAuto")) {
                         start = new SequentialCommandGroup(

@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import frc.robot.Utils.TrapezoidController;
-import frc.robot.Constants.LimelightConstants;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants.*;
 import frc.robot.Constants;
@@ -153,7 +152,7 @@ public class DriveOffset extends Command {
         counter = 0;
 
         trapezoidController = new TrapezoidController(0.0, threshold,minVel,
-            maxVelEntry.getDouble(LimelightConstants.driveOffsetMinVel),
+            maxVelEntry.getDouble(LimelightConstants.driveOffsetMaxVel),
             maxAccEntry.getDouble(LimelightConstants.driveOffsetMaxAccMSS),
             maxDccEntry.getDouble(LimelightConstants.driveOffsetMaxDccMSS),
             decelKpEntry.getDouble(1.0));
