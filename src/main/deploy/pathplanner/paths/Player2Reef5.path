@@ -8,72 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7618693181818177,
-        "y": 1.4252954545454533
+        "x": 1.6197590778720194,
+        "y": 1.264002362563876
       },
       "isLocked": false,
       "linkedName": "Player2"
     },
     {
       "anchor": {
-        "x": 2.064119318181818,
-        "y": 1.606889204545455
+        "x": 3.2482734375,
+        "y": 2.1496484375
       },
       "prevControl": {
-        "x": 1.828683840283109,
-        "y": 1.5228051052959153
-      },
-      "nextControl": {
-        "x": 2.343323863636363,
-        "y": 1.706605113636365
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.732215909090909,
-        "y": 1.88609375
-      },
-      "prevControl": {
-        "x": 2.4712346156858747,
-        "y": 1.7719144341352995
-      },
-      "nextControl": {
-        "x": 2.9612552428164567,
-        "y": 1.986298458504926
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.2307954545454542,
-        "y": 2.235099431818181
-      },
-      "prevControl": {
-        "x": 3.0612784090909093,
-        "y": 2.045639204545455
-      },
-      "nextControl": {
-        "x": 3.3974941694129113,
-        "y": 2.421409760199456
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.7194034090909094,
-        "y": 2.6838210227272725
-      },
-      "prevControl": {
-        "x": 3.432615190915386,
-        "y": 2.274245000582777
+        "x": 3.0300714233161834,
+        "y": 2.027632532773913
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Reef5"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -89,8 +41,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 59.99999999999999
+    "velocity": 2.0,
+    "rotation": 58.234611817411476
   },
   "reversed": false,
   "folder": "PlayerReef",

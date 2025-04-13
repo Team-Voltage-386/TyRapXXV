@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.*;
@@ -550,13 +551,15 @@ public class RobotContainer {
                                 m_elevator.runOnce(() -> m_elevator.setLevelFlag(ElevatorLevel.LEVEL4)),
                                 buildScoreOffsetAutoCommand(scoreLeft),
                                 new StationaryWait(m_swerve, .1),
+
                                 getAutonomousCommand(pathToCoralStn, false),
                                 new DriveDistance2(m_swerve, () -> .55, 180).withTimeout(.9),
                                 new StopDrive(m_swerve),
-                                new StationaryWait(m_swerve, .4),
+                                new WaitUntilCommand(m_coral::detectsCoral).withTimeout(.4),
+
                                 getAutonomousCommand(pathCoralToReef, false),
-                                new StopDrive(m_swerve),
                                 buildScoreOffsetCommand(scoreLeft),
+
                                 getAutonomousCommand(pathToCoralStn2, false),
                                 new DriveDistance2(m_swerve, () -> .55, 180).withTimeout(0.7),
                                 new StopDrive(m_swerve),

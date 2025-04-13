@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Subsystems.Drivetrain;
 import frc.robot.Subsystems.Limelight;
 import frc.robot.Utils.CoordinateUtilities;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -151,38 +153,61 @@ public class DriveOffset extends Command {
         // Reset counter
         counter = 0;
 
-        trapezoidController = new TrapezoidController(0.0, threshold,minVel,
-            maxVelEntry.getDouble(LimelightConstants.driveOffsetMaxVel),
-            maxAccEntry.getDouble(LimelightConstants.driveOffsetMaxAccMSS),
-            maxDccEntry.getDouble(LimelightConstants.driveOffsetMaxDccMSS),
-            decelKpEntry.getDouble(1.0));
+        Transform2d relativeDesiredPose = getRobotRelativeDesiredPose();
+
+        // Calculate proportion of current velocity in line with the desired velocity
+        chassisSpeed = dt.getChassisSpeeds();
+        var currentSpeedVec = new Vector<>(Nat.N2());
+        currentSpeedVec.set(0, 0, chassisSpeed.vxMetersPerSecond);
+        currentSpeedVec.set(1, 0, chassisSpeed.vyMetersPerSecond);
+
+        var offsetVector = new Vector<>(Nat.N2());
+        offsetVector.set(0, 0, relativeDesiredPose.getX());
+        offsetVector.set(1, 0, relativeDesiredPose.getY());
+        var offsetUnitVector = offsetVector.div(offsetVector.norm());
+        double speedInDesiredDirection = currentSpeedVec.dot(offsetUnitVector);
+
+        trapezoidController = new TrapezoidController(speedInDesiredDirection, threshold, minVel,
+                        maxVelEntry.getDouble(LimelightConstants.driveOffsetMinVel),
+                        maxAccEntry.getDouble(LimelightConstants.driveOffsetMaxAccMSS),
+                        maxDccEntry.getDouble(LimelightConstants.driveOffsetMaxDccMSS),
+                        decelKpEntry.getDouble(1.0));
     }
 
-    // This function uses limelight and odometry to report the desired pose relative to the field
-    public Pose2d getDesiredPose() {
-        // Get values from limelight
-        double rotAngleDegrees = -1 * ll.getFilteredYawDegrees();
-        double yDis = -1 * ll.getxDistanceMeters();
-        double xDis = ll.getzDistanceMeters();
-        // Get april tag position from camera
-        tagPose = new Pose2d(xDis, yDis, new Rotation2d(Math.toRadians(rotAngleDegrees + 180.0)));
-        // Calculate desired offset using shuffleboard and at 0 degrees
-        Transform2d desiredOffset = new Transform2d(xOffset, yOffset, new Rotation2d());
-        // Calculate robot-relative desired pose
-        Pose2d desiredPoseRobotRelative = tagPose.plus(desiredOffset).plus(cameraToRobot);
-        // Get current robot pose from odometry
-        currentPose = dt.getRoboPose2d();
-        // Get desired position from odometry
-        Pose2d desiredPoseField = currentPose
-                .plus(new Transform2d(desiredPoseRobotRelative.getX(), desiredPoseRobotRelative.getY(),
-                        new Rotation2d(Math.toRadians(rotAngleDegrees))));
-        // Print outs for testing
-        //System.out.println("currentPose = " + currentPose);
-        //System.out.println("tagPose = " + tagPose);
-        //System.out.println("desiredPoseRobotRelative = " + desiredPoseRobotRelative);
-        //System.out.println("desiredPoseField = " + desiredPoseField);
+    
+    public Transform2d getRobotRelativeDesiredPose() {
+            double rotAngleDegrees = -1 * ll.getFilteredYawDegrees();
+            double yDis = -1 * ll.getxDistanceMeters();
+            double xDis = ll.getzDistanceMeters();
+            // Get april tag position from camera
+            tagPose = new Pose2d(xDis, yDis, new Rotation2d(Math.toRadians(rotAngleDegrees + 180.0)));
+            // Calculate desired offset using shuffleboard and at 0 degrees
+            Transform2d desiredOffset = new Transform2d(xOffset, yOffset, new Rotation2d());
+            // Calculate robot-relative desired pose
+            Pose2d desiredPoseRobotRelative = tagPose.plus(desiredOffset).plus(cameraToRobot);
 
-        return desiredPoseField;
+            return new Transform2d(desiredPoseRobotRelative.getX(), desiredPoseRobotRelative.getY(),
+                            new Rotation2d(Math.toRadians(rotAngleDegrees)));
+    }
+
+    // This function uses limelight and odometry to report the desired pose relative
+    // to the field
+    public Pose2d getDesiredPose() {
+            Transform2d desiredPoseRobotRelative = getRobotRelativeDesiredPose();
+            // Get values from limelight
+            // Get current robot pose from odometry
+            currentPose = dt.getRoboPose2d();
+            // Get desired position from odometry
+            Pose2d desiredPoseField = currentPose
+                            .plus(new Transform2d(desiredPoseRobotRelative.getX(), desiredPoseRobotRelative.getY(),
+                                            desiredPoseRobotRelative.getRotation()));
+            // Print outs for testing
+            // System.out.println("currentPose = " + currentPose);
+            // System.out.println("tagPose = " + tagPose);
+            // System.out.println("desiredPoseRobotRelative = " + desiredPoseRobotRelative);
+            // System.out.println("desiredPoseField = " + desiredPoseField);
+
+            return desiredPoseField;
     }
 
     @Override
