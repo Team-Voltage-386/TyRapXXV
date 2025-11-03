@@ -46,7 +46,8 @@ public class ElevatorSubsystem extends SafeableSubsystem {
         LEVEL3,
         LEVEL4,
         LEVEL5,
-        LEVEL6;
+        LEVEL6,
+        LEVEL7;
 
         /**
          * Converts an integer to an ElevatorLevel
@@ -71,6 +72,8 @@ public class ElevatorSubsystem extends SafeableSubsystem {
                     return LEVEL5;
                 case 6:
                     return LEVEL6;
+                case 7:
+                    return LEVEL7;
                 default:
                     return GROUND;
             }
@@ -98,6 +101,8 @@ public class ElevatorSubsystem extends SafeableSubsystem {
                     return 5;
                 case LEVEL6:
                     return 6;
+                case LEVEL7:
+                    return 7;
                 default:
                     return 0;
             }
@@ -126,6 +131,8 @@ public class ElevatorSubsystem extends SafeableSubsystem {
                     return level5;
                 case LEVEL6:
                     return level6;
+                case LEVEL7:
+                    return level7;
                 default:
                     return ground;
             }
@@ -154,6 +161,9 @@ public class ElevatorSubsystem extends SafeableSubsystem {
                 case LEVEL6:
                     level6 = height;
                     break;
+                case LEVEL7:
+                    level7 = height;
+                    break;
                 default:
                     ground = Constants.Elevator.Heights.kGround;
                     break;
@@ -179,6 +189,8 @@ public class ElevatorSubsystem extends SafeableSubsystem {
                     return String.format("LEVEL5 (%.2f rotations)", level5);
                 case LEVEL6:
                     return String.format("LEVEL6 (%.2f rotations)", level6);
+                case LEVEL7:
+                    return String.format("LEVEL6 (%.2f rotations)", level7);
                 default:
                     return String.format("GROUND (%.2f rotations)", ground);
             }
@@ -191,6 +203,7 @@ public class ElevatorSubsystem extends SafeableSubsystem {
         double level4 = Constants.Elevator.Heights.kLevel4;
         double level5 = Constants.Elevator.Heights.kLevel5;
         double level6 = Constants.Elevator.Heights.kLevel6;
+        double level7 = Constants.Elevator.Heights.kLevel7;
     }
 
     private ElevatorLevel m_level = ElevatorLevel.GROUND;
@@ -236,6 +249,7 @@ public class ElevatorSubsystem extends SafeableSubsystem {
     protected DoubleEntry LEVEL_4;
     protected DoubleEntry LEVEL_5;
     protected DoubleEntry LEVEL_6;
+    protected DoubleEntry LEVEL_7;
 
     protected double outputVoltage = 0;
     protected double desiredPosition = 0;
@@ -276,6 +290,7 @@ public class ElevatorSubsystem extends SafeableSubsystem {
         LEVEL_4 = m_table.getDoubleTopic("Level 4").getEntry(ElevatorLevel.LEVEL4.toHeight());
         LEVEL_5 = m_table.getDoubleTopic("Level 5").getEntry(ElevatorLevel.LEVEL5.toHeight());
         LEVEL_6 = m_table.getDoubleTopic("Level 6").getEntry(ElevatorLevel.LEVEL6.toHeight());
+        LEVEL_7 = m_table.getDoubleTopic("Level 7").getEntry(ElevatorLevel.LEVEL7.toHeight());
 
         m_elevatorKs.set(Constants.Elevator.FF.kS);
         m_elevatorKg.set(Constants.Elevator.FF.kG);
@@ -293,6 +308,7 @@ public class ElevatorSubsystem extends SafeableSubsystem {
         LEVEL_4.set(ElevatorLevel.LEVEL4.toHeight());
         LEVEL_5.set(ElevatorLevel.LEVEL5.toHeight());
         LEVEL_6.set(ElevatorLevel.LEVEL6.toHeight());
+        LEVEL_7.set(ElevatorLevel.LEVEL7.toHeight());
 
         m_motorLeader = new SparkFlex(Constants.MechID.kElevatorFrontCanId, MotorType.kBrushless);
         m_motorFollower = new SparkFlex(Constants.MechID.kElevatorBackCanId, MotorType.kBrushless);
@@ -444,6 +460,7 @@ public class ElevatorSubsystem extends SafeableSubsystem {
         ElevatorLevel.LEVEL4.setDashboard(LEVEL_4.get());
         ElevatorLevel.LEVEL5.setDashboard(LEVEL_5.get());
         ElevatorLevel.LEVEL6.setDashboard(LEVEL_6.get());
+        ElevatorLevel.LEVEL7.setDashboard(LEVEL_7.get());
     }
 
     public void setVoltageTest(double voltage) {

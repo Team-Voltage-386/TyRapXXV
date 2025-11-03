@@ -200,7 +200,7 @@ public class RobotContainer {
                                                                                 .getzDistanceMeters() > (Offsets.cameraOffsetFromFrontBumber
                                                                                                 + 0.1)),
                                                 new PrintCommand("level has not been set").andThen(new RumbleDrive(.5)),
-                                                () -> (m_elevator.isAnyLevelSet()) && m_leds.canSeeValidTag()));
+                                                () -> (m_elevator.isAnyLevelSet()) && m_leds.canSeeValidTag() && m_coral.isCoralIn()));
 
                 this.m_scoreRight = new SequentialCommandGroup(
                                 new ConditionalCommand(
@@ -211,7 +211,7 @@ public class RobotContainer {
                                                                                 .getzDistanceMeters() > (Offsets.cameraOffsetFromFrontBumber
                                                                                                 + 0.1)),
                                                 new PrintCommand("level has not been set").andThen(new RumbleDrive(.5)),
-                                                () -> (m_elevator.isAnyLevelSet()) && m_leds.canSeeValidTag()));
+                                                () -> (m_elevator.isAnyLevelSet()) && m_leds.canSeeValidTag() && m_coral.isCoralIn()));
 
                 this.m_scoreCancel = new SequentialCommandGroup(
                                 m_elevator.runOnce(() -> m_scoreLeft.cancel()),
@@ -412,7 +412,7 @@ public class RobotContainer {
         return new SelectCommand<>(
                 Map.ofEntries(
                 Map.entry(CommandSelector.LOW, buildRemoveAlgaeCommand(ElevatorLevel.LEVEL3, ElevatorLevel.LEVEL5)),
-                Map.entry(CommandSelector.HIGH, buildRemoveAlgaeCommand(ElevatorLevel.LEVEL4, ElevatorLevel.LEVEL6)),
+                Map.entry(CommandSelector.HIGH, buildRemoveAlgaeCommand(ElevatorLevel.LEVEL7, ElevatorLevel.LEVEL6)),
                 Map.entry(CommandSelector.NULL, new RumbleDrive(0.5))),
         this::select);
         }
@@ -432,7 +432,9 @@ public class RobotContainer {
                                 new EjectCoral(m_coral),
                                 new StationaryWait(m_swerve, .4),
                                 new ConditionalCommand(
-                                        buildSelectRemoveAlgaeCommand(), 
+                                        new SequentialCommandGroup(
+                                        new DriveFixedVelocity(m_swerve, 180, () -> 3.0).withTimeout(0.25),
+                                        buildSelectRemoveAlgaeCommand()),
                                         new DriveFixedVelocity(m_swerve, 180, () -> m_elevator.getLevelFlag() == ElevatorLevel.LEVEL4 ? 1.5 : 3.0).withTimeout(0.25),
                                         () -> (shouldRemoveAlgae())),
                                 m_elevator.runOnce(() -> m_elevator.setLevel(ElevatorLevel.GROUND)));
@@ -455,7 +457,9 @@ public class RobotContainer {
                                 new EjectCoral(m_coral),
                                 new StationaryWait(m_swerve, .4),
                                 new ConditionalCommand(
-                                        buildSelectRemoveAlgaeCommand(),  
+                                        new SequentialCommandGroup(
+                                        new DriveFixedVelocity(m_swerve, 180, () -> 3.0).withTimeout(0.25),
+                                        buildSelectRemoveAlgaeCommand()),  
                                         new DriveFixedVelocity(m_swerve, 180, () -> m_elevator.getLevelFlag() == ElevatorLevel.LEVEL4 ? 1.5 : 3.0).withTimeout(0.25),
                                         () -> (shouldRemoveAlgae())),
                                 m_elevator.runOnce(() -> m_elevator.setLevel(ElevatorLevel.GROUND)));
@@ -553,14 +557,14 @@ public class RobotContainer {
                                 buildScoreOffsetAutoCommand(scoreLeft),
                                 new StationaryWait(m_swerve, .1),
                                 getAutonomousCommand(pathToCoralStn, false),
-                                new DriveDistance2(m_swerve, () -> .55, 180).withTimeout(.9),
+                                new DriveDistance2(m_swerve, () -> 1.2, 180).withTimeout(1.5),
                                 new StopDrive(m_swerve),
                                 new StationaryWait(m_swerve, .4),
                                 getAutonomousCommand(pathCoralToReef, false),
                                 new StopDrive(m_swerve),
-                                buildScoreOffsetCommand(scoreLeft),
+                                buildScoreOffsetAutoCommand(scoreLeft),
                                 getAutonomousCommand(pathToCoralStn2, false),
-                                new DriveDistance2(m_swerve, () -> .55, 180).withTimeout(0.7),
+                                new DriveDistance2(m_swerve, () -> 1.2, 180).withTimeout(1.5),
                                 new StopDrive(m_swerve),
                                 m_swerve.runOnce(() -> m_swerve.setEnableVisionPoseInputs(false)));
         }
