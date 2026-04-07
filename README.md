@@ -75,3 +75,4 @@ To maintain a clean and efficient workflow, follow these guidelines for branch n
 - `chore`: Maintenance or minor changes
 
 By following this structure, we ensure a stable, working repository at all times.
+a
